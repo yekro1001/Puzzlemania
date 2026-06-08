@@ -1,27 +1,38 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
     // inspector parameters
-    [Header("References")]
+    [Header("Groups")]
     [SerializeField]
     private CanvasGroup mainGroup;
     [SerializeField]
-    private Image patternImage;
+    private CanvasGroup startGroup;
+    [SerializeField]
+    private CanvasGroup settingsGroup;
+    [SerializeField]
+    private CanvasGroup attributionsGroup;
+    [Header("Buttons")]
     [SerializeField]
     private Button startButton;
     [SerializeField]
     private Button settingsButton;
     [SerializeField]
+    private Button attributionsButton;
+    [SerializeField]
     private Button exitButton;
     [SerializeField]
-    private CanvasGroup settingsGroup;
-    [SerializeField]
-    private Transform playerSkinPivot;
-    [SerializeField]
     private Button switchSkinButton;
+    [SerializeField]
+    private Button backFromStartButton;
+    [SerializeField]
+    private Button backFromSettingsButton;
+    [SerializeField]
+    private Button backFromAttributionsButton;
+    [Header("Sliders")]
     [SerializeField]
     private Slider musicVolumeSlider;
     [SerializeField]
@@ -34,8 +45,15 @@ public class MainMenuManager : MonoBehaviour
     private Slider patternTransparencySlider;
     [SerializeField]
     private Slider playerSkinRotationSpeedSlider;
+    [Header("Other References")]
     [SerializeField]
-    private Button backFromSettingsButton;
+    private AudioClip bgmAudio;
+    [SerializeField]
+    private Image patternImage;
+    [SerializeField]
+    private Transform levelsList;
+    [SerializeField]
+    private Transform playerSkinPivot;
     [Header("Settings")]
     [SerializeField]
     [Range(0, 1)]
@@ -55,26 +73,39 @@ public class MainMenuManager : MonoBehaviour
     // readonly values
     private static readonly int totalPlayerSkins = Enum.GetValues(typeof(PlayerSkin)).Length;
 
+    // privale vars
+    private AudioSource _bgmAudioSource;
+
     private void Start()
     {
         // initialize player prefs
-        musicVolume = PlayerPrefsManager.MusicVolume; // todo implement
+        musicVolume = PlayerPrefsManager.MusicVolume;
         playerSkin = PlayerPrefsManager.PlayerSkin;
         patternOffsetSpeed = PlayerPrefsManager.PatternOffsetSpeed;
         patternTransparency = PlayerPrefsManager.PatternTransparency;
         playerSkinRotationSpeed = PlayerPrefsManager.PlayerSkinRotationSpeed;
+        int levelsCompleted = PlayerPrefsManager.LevelsCompleted;
 
         // create copy of image material to prevent offsetting every image
         Material imageMaterialCopy = new(patternImage.material);
         patternImage.material = imageMaterialCopy;
 
-
         // close all submenus
+        startGroup.alpha = 0;
+        startGroup.blocksRaycasts = false;
         settingsGroup.alpha = 0;
         settingsGroup.blocksRaycasts = false;
         playerSkinPivot.gameObject.SetActive(false);
+        attributionsGroup.alpha = 0;
+        attributionsGroup.blocksRaycasts = false;
         mainGroup.alpha = 1;
         mainGroup.blocksRaycasts = true;
+
+        // unlock levels
+        for (int i = 0; i < levelsList.childCount; i++)
+        {
+            levelsList.GetChild(i).GetComponent<Selectable>().interactable = i <= levelsCompleted;
+        }
 
         // enable active skin
         for (int i = 0; i < playerSkinPivot.childCount; i++)
@@ -82,8 +113,36 @@ public class MainMenuManager : MonoBehaviour
             playerSkinPivot.GetChild(i).gameObject.SetActive(i == (int)playerSkin);
         }
 
+        // load bgm
+        GameObject bgmAudioSource = GameObject.Find("BGM Audio Source");
+        if (bgmAudioSource)
+        {
+            _bgmAudioSource = bgmAudioSource.GetComponent<AudioSource>();
+        }
+        else
+        {
+            _bgmAudioSource = new GameObject("BGM Audio Source").AddComponent<AudioSource>();
+            _bgmAudioSource.clip = bgmAudio;
+            _bgmAudioSource.loop = true;
+            _bgmAudioSource.Play();
+            DontDestroyOnLoad(_bgmAudioSource);
+        }
+
         // assign button handlers
-        startButton.onClick.AddListener(() => { });
+        startButton.onClick.AddListener(() =>
+        {
+            mainGroup.alpha = 0;
+            mainGroup.blocksRaycasts = false;
+            startGroup.alpha = 1;
+            startGroup.blocksRaycasts = true;
+        });
+        backFromStartButton.onClick.AddListener(() =>
+        {
+            startGroup.alpha = 0;
+            startGroup.blocksRaycasts = false;
+            mainGroup.alpha = 1;
+            mainGroup.blocksRaycasts = true;
+        });
         settingsButton.onClick.AddListener(() =>
         {
             mainGroup.alpha = 0;
@@ -97,6 +156,20 @@ public class MainMenuManager : MonoBehaviour
             settingsGroup.alpha = 0;
             settingsGroup.blocksRaycasts = false;
             playerSkinPivot.gameObject.SetActive(false);
+            mainGroup.alpha = 1;
+            mainGroup.blocksRaycasts = true;
+        });
+        attributionsButton.onClick.AddListener(() =>
+        {
+            mainGroup.alpha = 0;
+            mainGroup.blocksRaycasts = false;
+            attributionsGroup.alpha = 1;
+            attributionsGroup.blocksRaycasts = true;
+        });
+        backFromAttributionsButton.onClick.AddListener(() =>
+        {
+            attributionsGroup.alpha = 0;
+            attributionsGroup.blocksRaycasts = false;
             mainGroup.alpha = 1;
             mainGroup.blocksRaycasts = true;
         });
@@ -121,7 +194,7 @@ public class MainMenuManager : MonoBehaviour
         {
             musicVolume = value;
             PlayerPrefsManager.MusicVolume = value;
-            // todo change music volume
+            _bgmAudioSource.volume = value;
         });
         mouseSensitivitySlider.onValueChanged.AddListener((value) =>
         {
@@ -165,5 +238,16 @@ public class MainMenuManager : MonoBehaviour
 
         // rotate player skin pivot
         playerSkinPivot.Rotate(Vector3.up, playerSkinRotationSpeed * Time.deltaTime);
+    }
+
+    public static void OpenURL(string url)
+    {
+        Application.OpenURL(url);
+    }
+
+    public static void StartLevel(int level)
+    {
+        PlayerPrefsManager.SelectedLevel = level;
+        SceneManager.LoadScene("MainGame");
     }
 }

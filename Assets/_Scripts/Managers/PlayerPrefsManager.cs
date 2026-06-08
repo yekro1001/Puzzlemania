@@ -41,4 +41,16 @@ public static class PlayerPrefsManager
         get => PlayerPrefs.GetFloat("PlayerSkinRotationSpeed", 270);
         set => PlayerPrefs.SetFloat("PlayerSkinRotationSpeed", value);
     }
+
+    public static int LevelsCompleted
+    {
+        get => PlayerPrefs.GetInt("LevelsCompleted", 0);
+        set => PlayerPrefs.SetInt("LevelsCompleted", value);
+    }
+
+    public static int SelectedLevel
+    {
+        get => PlayerPrefs.GetInt("SelectedLevel", 0);
+        set => PlayerPrefs.SetInt("SelectedLevel", value);
+    }
 }
