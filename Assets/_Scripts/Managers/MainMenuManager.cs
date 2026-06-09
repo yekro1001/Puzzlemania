@@ -78,7 +78,10 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
-        // initialize player prefs
+        // reset time scale
+        Time.timeScale = 1;
+
+        // load player prefs
         musicVolume = PlayerPrefsManager.MusicVolume;
         playerSkin = PlayerPrefsManager.PlayerSkin;
         patternOffsetSpeed = PlayerPrefsManager.PatternOffsetSpeed;

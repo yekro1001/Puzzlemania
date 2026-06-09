@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
-public class CCBasedController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     // inspector parameters
     [Header("References")]
@@ -17,9 +17,8 @@ public class CCBasedController : MonoBehaviour
     [SerializeField]
     [Tooltip("Meters per second")]
     private float moveSpeed = 3;
-    [SerializeField]
     [Tooltip("Degrees per pixel")]
-    private float lookSensitivity = 0.25f;
+    public float lookSensitivity = 0.25f;
     [SerializeField]
     [Tooltip("Degrees per second")]
     private float turnSpeed = 360;
@@ -39,11 +38,13 @@ public class CCBasedController : MonoBehaviour
                     topDownCamera.Priority = 0;
                     thirdPersonCamera.Priority = 1;
                     _moveRotation = Quaternion.LookRotation(new(thirdPersonCamera.Target.TrackingTarget.forward.x, 0, thirdPersonCamera.Target.TrackingTarget.forward.z));
+                    Cursor.lockState = CursorLockMode.Locked;
                     break;
                 case CameraType.TopDown:
                     thirdPersonCamera.Priority = 0;
                     topDownCamera.Priority = 1;
                     _moveRotation = Quaternion.LookRotation(new(topDownCamera.transform.up.x, 0, topDownCamera.transform.up.z));
+                    Cursor.lockState = CursorLockMode.None;
                     break;
             }
             cameraType = value;
@@ -58,19 +59,29 @@ public class CCBasedController : MonoBehaviour
     private CharacterController _cc;
     private Animator _animator;
     private Quaternion _moveRotation;
+    private InputActionMap _playerActionMap;
+    private InputAction _lookAction;
+    private InputAction _moveAction;
+    private InputAction _cameraAction;
 
     private void OnEnable()
     {
-        InputSystem.actions.FindActionMap("Player").FindAction("Camera").performed += SwitchCamera;
+        // get actions
+        _playerActionMap = InputSystem.actions.FindActionMap("Player");
+        _lookAction = _playerActionMap.FindAction("Look");
+        _moveAction = _playerActionMap.FindAction("Move");
+        _cameraAction = _playerActionMap.FindAction("Camera");
+        _cameraAction.performed += SwitchCamera;
     }
 
     private void OnDisable()
     {
-        InputSystem.actions.FindActionMap("Player").FindAction("Camera").performed -= SwitchCamera;
+        _cameraAction.performed -= SwitchCamera;
     }
 
     private void Start()
     {
+        // set private refs
         _cc = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
 
@@ -80,15 +91,15 @@ public class CCBasedController : MonoBehaviour
 
     private void Update()
     {
-        if (CameraType == CameraType.ThirdPerson)
+        if (CameraType == CameraType.ThirdPerson && Time.timeScale > 0)
         {
             // rotate 2rd person camera by rotating its pivot
-            Vector2 lookInput = InputSystem.actions.FindActionMap("Player").FindAction("Look").ReadValue<Vector2>();
+            Vector2 lookInput = _lookAction.ReadValue<Vector2>();
             _moveRotation = Quaternion.LookRotation(new(thirdPersonCamera.Target.TrackingTarget.forward.x, 0, thirdPersonCamera.Target.TrackingTarget.forward.z));
             thirdPersonCamera.Target.TrackingTarget.Rotate(Vector3.up, lookSensitivity * lookInput.x);
             thirdPersonCamera.Target.TrackingTarget.Rotate(Vector3.right, lookSensitivity * -lookInput.y);
         }
-        Vector2 moveIput = InputSystem.actions.FindActionMap("Player").FindAction("Move").ReadValue<Vector2>();
+        Vector2 moveIput = _moveAction.ReadValue<Vector2>();
         if (moveIput != Vector2.zero)
         {
             // move character controller in global space
