@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.Playables;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class GameManager : MonoBehaviour
     [Header("Arrays")]
     [SerializeField]
     private PlayerController[] playerSkins;
+    [SerializeField]
+    private GameObject[] levels;
     [Header("Buttons")]
     [SerializeField]
     private Button pauseButton;
@@ -20,6 +23,8 @@ public class GameManager : MonoBehaviour
     private Button resumeButton;
     [SerializeField]
     private Button returnToMenuButton;
+    [SerializeField]
+    private Button returnFromWinScreenButton;
     [Header("Sliders")]
     [SerializeField]
     private Slider musicVolumeSlider;
@@ -31,7 +36,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private CanvasGroup pauseGroup;
     [SerializeField]
+    private CanvasGroup winGroup;
+    [SerializeField]
     private TMP_Text skipCutsceneHint;
+    [SerializeField]
+    private CanvasGroup blackScreen;
+    [SerializeField]
+    private TMP_Text theNextDayText;
+    [Header("Settings")]
+    [SerializeField]
+    private float transitionDuration = 1;
 
     // private vars
     private AudioSource _bgmAudioSource;
@@ -39,6 +53,7 @@ public class GameManager : MonoBehaviour
     private InputActionMap _playerActionMap;
     private InputActionMap _uiActionMap;
     private InputAction _pauseAction;
+    private Vector3 _spawnPoint;
 
     private void OnEnable()
     {
@@ -74,17 +89,25 @@ public class GameManager : MonoBehaviour
         float musicVolume = PlayerPrefsManager.MusicVolume;
         float mouseSensitivity = PlayerPrefsManager.MouseSensitivity;
         int playerSkin = (int)PlayerPrefsManager.PlayerSkin;
-        int selectedLevel = PlayerPrefsManager.SelectedLevel; // todo use
+        int selectedLevel = PlayerPrefsManager.SelectedLevel;
 
-        // close pause menu
+        // close all menus
         pauseGroup.alpha = 0;
         pauseGroup.blocksRaycasts = false;
+        winGroup.alpha = 0;
+        winGroup.blocksRaycasts = false;
+        blackScreen.alpha = 0;
+        theNextDayText.alpha = 0;
 
         // activate selected skin
         for (int i = 0; i < playerSkins.Length; i++)
         {
             playerSkins[i].gameObject.SetActive(i == playerSkin);
         }
+
+        // load seleccted level
+        GameObject levelInstance = Instantiate(levels[selectedLevel]);
+        levelInstance.name = "Level";
 
         // set private refs
         _player = playerSkins[playerSkin];
@@ -93,6 +116,7 @@ public class GameManager : MonoBehaviour
             sourceTransform = _player.transform,
             weight = 1
         });
+        _spawnPoint = _player.transform.position;
         _bgmAudioSource = GameObject.Find("BGM Audio Source").GetComponent<AudioSource>();
 
         // assign button handlers
@@ -114,6 +138,7 @@ public class GameManager : MonoBehaviour
             pauseGroup.blocksRaycasts = false;
         });
         returnToMenuButton.onClick.AddListener(() => SceneManager.LoadScene("MainMenu"));
+        returnFromWinScreenButton.onClick.AddListener(() => SceneManager.LoadScene("MainMenu"));
 
         // assign sliders handlers
         musicVolumeSlider.onValueChanged.AddListener((value) =>
@@ -130,6 +155,41 @@ public class GameManager : MonoBehaviour
         // set slider values
         musicVolumeSlider.value = musicVolume;
         mouseSensitivitySlider.value = mouseSensitivity;
+    }
+
+    public void CompleteLevel()
+    {
+        int completedLevels = PlayerPrefsManager.LevelsCompleted;
+        int selectedLevel = ++PlayerPrefsManager.SelectedLevel;
+        if (selectedLevel > completedLevels)
+        {
+            PlayerPrefsManager.LevelsCompleted = selectedLevel;
+        }
+        if (selectedLevel >= levels.Length)
+        {
+            Time.timeScale = 0;
+            Cursor.lockState = CursorLockMode.None;
+            winGroup.alpha = 1;
+            winGroup.blocksRaycasts = true;
+        }
+        else
+        {
+            StartCoroutine(nameof(TransitionCoroutine));
+        }
+    }
+
+    public void TogglePlayerMap(bool enable)
+    {
+        if (enable)
+        {
+            _playerActionMap.Enable();
+            skipCutsceneHint.alpha = 0;
+        }
+        else
+        {
+            _playerActionMap.Disable();
+            skipCutsceneHint.alpha = 1;
+        }
     }
 
     private void TogglePauseMenu(InputAction.CallbackContext context)
@@ -153,17 +213,37 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void TogglePlayerMap(bool enable)
+    private IEnumerator TransitionCoroutine()
     {
-        if (enable)
+        _playerActionMap.Disable();
+        _uiActionMap.Disable();
+        Time.timeScale = 0;
+        float halfDuration = transitionDuration * 0.5f;
+        float t = 0;
+        for (; t < halfDuration; t += Time.unscaledDeltaTime)
         {
-            _playerActionMap.Enable();
-            skipCutsceneHint.alpha = 0;
+            blackScreen.alpha = t / (halfDuration);
+            yield return null;
         }
-        else
+        theNextDayText.alpha = 1;
+        for (; t < transitionDuration; t += Time.unscaledDeltaTime)
         {
-            _playerActionMap.Disable();
-            skipCutsceneHint.alpha = 1;
+            blackScreen.alpha = 1 - (t - halfDuration) / (halfDuration);
+            yield return null;
         }
+        blackScreen.alpha = 0;
+        Destroy(GameObject.Find("Level"));
+        GameObject levelInstance = Instantiate(levels[PlayerPrefsManager.SelectedLevel]);
+        levelInstance.name = "Level";
+        _player.transform.position = _spawnPoint;
+        _playerActionMap.Enable();
+        _uiActionMap.Enable();
+        Time.timeScale = 1;
+        for (; t < transitionDuration + halfDuration; t += Time.unscaledDeltaTime)
+        {
+            theNextDayText.alpha = 1 - (t - transitionDuration) / (halfDuration);
+            yield return null;
+        }
+        theNextDayText.alpha = 0;
     }
 }
