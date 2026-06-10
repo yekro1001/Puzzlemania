@@ -4,14 +4,14 @@ public class Pickupable : Interactable
 {
     // instector parameters
     [SerializeField]
-    private float elevatedDistance = 1;
+    protected float elevatedDistance = 1;
     [SerializeField]
-    private float putDownDistance = 1;
+    protected float putDownDistance = 1;
 
     // private vars
-    private PlayerController _player;
-    private float _initialHeight;
-    private bool _isPickedUp;
+    protected PlayerController _player;
+    protected float _initialHeight;
+    protected bool _isPickedUp;
 
     protected override void Start()
     {

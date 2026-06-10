@@ -1332,7 +1332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Outline
   outlineMode: 0
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
+  outlineWidth: 10
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -1349,6 +1349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pickupable
   hintText: {fileID: 8106733176909179802}
+  disableOnInit: 0
   elevatedDistance: 1.5
   putDownDistance: 1.1
 --- !u!65 &1398249162520541976

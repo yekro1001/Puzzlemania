@@ -4,10 +4,10 @@ public class DoorButton : Interactable
 {
     // inspector parameters
     [SerializeField]
-    private Animator doorController;
+    protected Animator doorController;
 
     // readonly values
-    private static readonly int openHash = Animator.StringToHash("open");
+    protected static readonly int openHash = Animator.StringToHash("open");
 
     protected override void Interact()
     {

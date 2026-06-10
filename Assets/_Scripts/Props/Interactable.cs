@@ -8,13 +8,15 @@ public abstract class Interactable : MonoBehaviour
     // instector parameters
     [SerializeField]
     protected TMP_Text hintText;
+    [SerializeField]
+    protected bool disableOnInit;
     
     // private vars
     protected Outline _outline;
     protected Collider _collider;
     protected InputActionMap _playerActionMap;
     protected InputAction _interactionAction;
-    protected bool _canBeInteractedWith = true;
+    protected bool _canBeInteractedWith;
 
     protected virtual void OnEnable()
     {
@@ -33,6 +35,7 @@ public abstract class Interactable : MonoBehaviour
         _outline = GetComponent<Outline>();
         _outline.enabled = false;
         hintText.alpha = 0;
+        _canBeInteractedWith = !disableOnInit;
     }
 
     protected virtual void OnTriggerEnter(Collider other)
@@ -62,4 +65,14 @@ public abstract class Interactable : MonoBehaviour
     }
 
     protected abstract void Interact();
+
+    public virtual void Reenable()
+    {
+        _canBeInteractedWith = true;
+    }
+
+    public virtual void Redisable()
+    {
+        _canBeInteractedWith = false;
+    }
 }
