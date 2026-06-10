@@ -1,10 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 using Unity.Cinemachine;
+using System.Collections;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
 {
     // inspector parameters
@@ -58,11 +61,13 @@ public class PlayerController : MonoBehaviour
     // private vars
     private CharacterController _cc;
     private Animator _animator;
+    private NavMeshAgent _agent;
     private Quaternion _moveRotation;
     private InputActionMap _playerActionMap;
     private InputAction _lookAction;
     private InputAction _moveAction;
     private InputAction _cameraAction;
+    private Vector3 _spawnPoint;
 
     private void OnEnable()
     {
@@ -84,6 +89,9 @@ public class PlayerController : MonoBehaviour
         // set private refs
         _cc = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+        _agent = GetComponent<NavMeshAgent>();
+        _agent.enabled = false;
+        _spawnPoint = transform.position;
 
         // trigger property's set sequence (setup camera for the first time)
         CameraType = cameraType;
@@ -108,15 +116,32 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(_moveRotation * moveVector), turnSpeed * Time.deltaTime);
             _animator.SetBool(runningHash, true);
         }
-        else
+        else if (!_agent.enabled)
         {
             _animator.SetBool(runningHash, false);
         }
+    }
+
+    public void GetAttacked()
+    {
+        StartCoroutine(nameof(GoBackCoroutine));
     }
 
     private void SwitchCamera(InputAction.CallbackContext context)
     {
         // loop between camera types
         CameraType = (CameraType)((int)(CameraType + 1) % totalCameraTypes);
+    }
+
+    private IEnumerator GoBackCoroutine()
+    {
+        _agent.enabled = true;
+        _playerActionMap.Disable();
+        _agent.SetDestination(_spawnPoint);
+        _animator.SetBool(runningHash, true);
+        yield return new WaitUntil(() => !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance);
+        _agent.enabled = false;
+        _playerActionMap.Enable();
+        _animator.SetBool(runningHash, false);
     }
 }

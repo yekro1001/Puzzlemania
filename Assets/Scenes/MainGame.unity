@@ -192,6 +192,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6702635459858530726, guid: ad8c2e4e0b206614abbcc03a38753ca9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 85877618}
+    - targetCorrespondingSourceObject: {fileID: 6702635459858530726, guid: ad8c2e4e0b206614abbcc03a38753ca9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 85877621}
   m_SourcePrefab: {fileID: 100100000, guid: ad8c2e4e0b206614abbcc03a38753ca9, type: 3}
 --- !u!1 &85877615 stripped
 GameObject:
@@ -262,6 +265,28 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.55
   m_Center: {x: 0, y: 0.5, z: 0.15}
+--- !u!195 &85877621
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85877615}
+  m_Enabled: 1
+  m_AgentTypeID: -334000983
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &130823482
 GameObject:
   m_ObjectHideFlags: 0
@@ -452,6 +477,28 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.55
   m_Center: {x: 0, y: 0.5, z: 0.15}
+--- !u!195 &161668348
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161668340}
+  m_Enabled: 1
+  m_AgentTypeID: -334000983
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &245622201
 GameObject:
   m_ObjectHideFlags: 0
@@ -2637,6 +2684,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2777180684130930147, guid: bdbf811528419b540805cf14dec86df5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 161668345}
+    - targetCorrespondingSourceObject: {fileID: 2777180684130930147, guid: bdbf811528419b540805cf14dec86df5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 161668348}
   m_SourcePrefab: {fileID: 100100000, guid: bdbf811528419b540805cf14dec86df5, type: 3}
 --- !u!1 &988889054
 GameObject:
@@ -4560,6 +4610,7 @@ MonoBehaviour:
   - {fileID: 5127776731020634924, guid: b26a1d180ba99594bbc852a957a8fbe4, type: 3}
   - {fileID: 7006630303673882996, guid: b9812045e3ab146479e244968997817c, type: 3}
   - {fileID: 5127776731020634924, guid: 24d69ca42a384914eaae49c7199557f5, type: 3}
+  - {fileID: 5127776731020634924, guid: 8c8ff49f8cf1d354ea0e0914e593f447, type: 3}
   pauseButton: {fileID: 130823484}
   resumeButton: {fileID: 1311224479}
   returnToMenuButton: {fileID: 1134133433}

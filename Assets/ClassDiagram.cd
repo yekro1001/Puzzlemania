@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="EnemyController">
+    <Position X="6.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIQAAAAAACQwAECAAAAAGAAQACAAQAAQIAAAAhAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Controllers\EnemyController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerController">
+    <Position X="8.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIWAAAACECBAwCASAAAAAAAACCAAAIAIIAQAAEABCSA=</HashCode>
+      <FileName>Assets\_Scripts\Controllers\PlayerController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager">
+    <Position X="12" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAEAAACAIQDACAAQACMAgEAEAECEIAgAEBwIBCQA=</HashCode>
+      <FileName>Assets\_Scripts\Managers\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MainMenuManager">
+    <Position X="13.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQSQgBBAiAAAgAAoCAQAAIACIQgAIIIAAEBh6IAIAA=</HashCode>
+      <FileName>Assets\_Scripts\Managers\MainMenuManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerPrefsManager">
+    <Position X="10.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAQABCAAAAAAAAgAAAAAAAAAAAAAAAAIAAABAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Managers\PlayerPrefsManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakableBox">
+    <Position X="19" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BCAAQAAAACAAAAAAAAAAAAAAMAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Props\BreakableBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakingPickupable">
+    <Position X="19" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Props\BreakingPickupable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DoorButton">
+    <Position X="17.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAIABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Props\DoorButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FacingCamera">
+    <Position X="15.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Props\FacingCamera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interactable">
+    <Position X="15.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAgQACAAAAAACAIAAAAAIAAAAIAoQIIACAAACQA=</HashCode>
+      <FileName>Assets\_Scripts\Props\Interactable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NextLevelTrigger">
+    <Position X="6.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACCAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Props\NextLevelTrigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pickupable">
+    <Position X="17.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAACDAAAAAAABAASAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Props\Pickupable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PressurePlate">
+    <Position X="20.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYAAIAAAAAAAAAAAAAAAACAAAABAAIAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Props\PressurePlate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Remote">
+    <Position X="20.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAIAAAAAAAAAAAAAAAQAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Props\Remote.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="CameraType">
+    <Position X="10.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Enums\CameraType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EnemyState">
+    <Position X="10.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAAIAgAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Enums\EnemyState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PlayerSkin">
+    <Position X="10.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\_Scripts\Enums\PlayerSkin.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
