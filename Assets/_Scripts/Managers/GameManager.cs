@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     private InputActionMap _uiActionMap;
     private InputAction _pauseAction;
     private Vector3 _spawnPoint;
+    private Quaternion _spawnRotation;
 
     private void OnEnable()
     {
@@ -117,6 +118,7 @@ public class GameManager : MonoBehaviour
             weight = 1
         });
         _spawnPoint = _player.transform.position;
+        _spawnRotation = _player.transform.rotation;
         _bgmAudioSource = GameObject.Find("BGM Audio Source").GetComponent<AudioSource>();
 
         // assign button handlers
@@ -226,6 +228,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         theNextDayText.alpha = 1;
+        _player.transform.SetPositionAndRotation(_spawnPoint, _spawnRotation);
         for (; t < transitionDuration; t += Time.unscaledDeltaTime)
         {
             blackScreen.alpha = 1 - (t - halfDuration) / (halfDuration);
@@ -235,7 +238,6 @@ public class GameManager : MonoBehaviour
         Destroy(GameObject.Find("Level"));
         GameObject levelInstance = Instantiate(levels[PlayerPrefsManager.SelectedLevel]);
         levelInstance.name = "Level";
-        _player.transform.position = _spawnPoint;
         _playerActionMap.Enable();
         _uiActionMap.Enable();
         Time.timeScale = 1;
